@@ -1,6 +1,6 @@
 # employeeTracker
 
-![Screenshot](noteTaker.PNG)
+![Screenshot](employeeTracker.PNG)
 
 ## Summary  
 
@@ -14,11 +14,11 @@ npm install
 npm start
 
 ## Walkthrough Video
-
+https://drive.google.com/file/d/1ikODhkidsb7o_fQVLAMbykJcXt__mNCN/view?usp=sharing
 
 ## Tools used
 
-HTML, CSS, JavaScript, Node, inquirer,console.table  and msql2.
+Node, inquirer,console.table and msql2.
 
 ## Contributors
 

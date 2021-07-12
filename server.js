@@ -64,12 +64,12 @@ function mainMenu(){
         arryEmp.push({"id":0,"name":"None"}) //Add none to all NULL for manager
       })
       db.promise().query(`SELECT id,title as name FROM role`)
-        .then(([rows,fields]) => {
-        //Get all roles from database and convert to array 
-        for (i=0;i<rows.length;i++){
-          arryDepart.push({"id":rows[i].id,"name":rows[i].name});
-        }
-      })
+      .then(([rows,fields]) => {
+      //Get all roles from database and convert to array 
+      for (i=0;i<rows.length;i++){
+        arryDepart.push({"id":rows[i].id,"name":rows[i].name});
+      }
+    })
       return viewSQL("addEmp",[arryEmp,arryDepart]);
     }
     else if(answers.mainChoice === 'update an employee role') {
@@ -185,6 +185,34 @@ function viewSQL(answer,arrylist) {
       }
       return `INSERT INTO employee (first_name,last_name,role_id,manager_id) 
               VALUES ("${answers.addFirstName}","${answers.addLastName}","${resultDept.id}","${resultName.id}");`
+    })
+    .then((data)=>{
+      db.promise().query(data)
+      mainMenu();
+    })
+    .catch((error) => {console.log(error)});
+  } else if(answer==="addRole") {
+    inquirer.prompt([{
+      type: 'input',
+      name: 'addRole',
+      message:"Input role you want to add"
+    },
+    {
+      type: 'input',
+      name: 'addSalary',
+      message:"How much is the salary for the role?"
+    },    
+    {
+      type: 'list',
+      name: 'addDepart',
+      message:"what department you want to select?",
+      choices: arrylist
+    }
+  ])
+    .then((answers) => {
+      const resutlDepart = arrylist.find( ({ name }) => name === answers.addDepart);// find department ID
+      return `INSERT INTO role (title,salary,department_id) 
+              VALUES ("${answers.addRole}","${answers.addSalary}","${resutlDepart.id}");`
     })
     .then((data)=>{
       db.promise().query(data)
