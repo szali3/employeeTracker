@@ -5,7 +5,7 @@ const mysql = require('mysql2');
 //Empty arrays to store values from databaes to display lists
 arryRole = [];
 arryDepart = [];
-arryEmp=[];
+arryEmp = [];
 
 //Connect to database
 const db = mysql.createConnection({ 
@@ -56,35 +56,35 @@ function mainMenu(){
     }
     else if(answers.mainChoice === 'add an employee') {
       db.promise().query(`SELECT id,concat(first_name," ",last_name) as name FROM employee`)
-      .then(([rows,fields]) => {
-      //Get all employee names from database and convert to array
-      for (i=0;i<rows.length;i++){
-        arryEmp.push({"id":rows[i].id,"name":rows[i].name});
+        .then(([rows,fields]) => {
+        //Get all employee names from database and convert to array
+        for (i=0;i<rows.length;i++){
+          arryEmp.push({"id":rows[i].id,"name":rows[i].name});
         }
         arryEmp.push({"id":0,"name":"None"}) //Add none to all NULL for manager
       })
       db.promise().query(`SELECT id,title as name FROM role`)
-      .then(([rows,fields]) => {
-      //Get all roles from database and convert to array 
-      for (i=0;i<rows.length;i++){
-        arryDepart.push({"id":rows[i].id,"name":rows[i].name});
-      }
-    })
+        .then(([rows,fields]) => {
+        //Get all roles from database and convert to array 
+        for (i=0;i<rows.length;i++){
+          arryDepart.push({"id":rows[i].id,"name":rows[i].name});
+        }
+      })
       return viewSQL("addEmp",[arryEmp,arryDepart]);
     }
     else if(answers.mainChoice === 'update an employee role') {
       db.promise().query(`SELECT id,concat(first_name," ",last_name) as name FROM employee`)
-      .then(([rows,fields]) => {
-      // Get all employee names and convert to array
-      for (i=0;i<rows.length;i++){
-        arryEmp.push({"id":rows[i].id,"name":rows[i].name});
+        .then(([rows,fields]) => {
+        // Get all employee names and convert to array
+        for (i=0;i<rows.length;i++){
+          arryEmp.push({"id":rows[i].id,"name":rows[i].name});
         }
       })
       db.promise().query(`SELECT id, title FROM role`)
-      .then(([rows,fields]) => {
-      //Get all roles and convert to array
-      for (i=0;i<rows.length;i++){
-        arryRole.push({"id":rows[i].id,"name":rows[i].title});
+        .then(([rows,fields]) => {
+        //Get all roles and convert to array
+        for (i=0;i<rows.length;i++){
+          arryRole.push({"id":rows[i].id,"name":rows[i].title});
         }
         return viewSQL("selRole",[arryEmp,arryRole])
       })
@@ -108,17 +108,17 @@ function viewSQL(answer,arrylist) {
       })
   } else if (answer==="employees") {
     db.promise().query(`
-      SELECT t2.id,t2.first_name,t2.last_name,role.title,role.salary,concat(t1.first_name, " ", t1.last_name) as manager_name
-      FROM employee t1 RIGHT JOIN employee t2 ON t1.id = t2.manager_id
-      JOIN role ON t2.role_id=role.id JOIN department ON department.id = role.department_id ORDER BY id ASC;`
-      ).then(([rows,fields]) => {
+        SELECT t2.id,t2.first_name,t2.last_name,role.title,role.salary,concat(t1.first_name, " ", t1.last_name) as manager_name
+        FROM employee t1 RIGHT JOIN employee t2 ON t1.id = t2.manager_id
+        JOIN role ON t2.role_id=role.id JOIN department ON department.id = role.department_id ORDER BY id ASC;`)
+      .then(([rows,fields]) => {
         console.table(rows);
       }).then(() => {
         mainMenu();
       })
   } else if(answer==="department") {
     db.promise().query(`SELECT *FROM department`)
-    .then(([rows,fields]) => {
+      .then(([rows,fields]) => {
         console.table(rows)
         mainMenu()
       })
@@ -164,12 +164,14 @@ function viewSQL(answer,arrylist) {
       type: 'input',
       name: 'addLastName',
       message:"Input employee last name" 
-    },{
+    },
+    {
       type: 'list',
       name: 'selDepart',
       message:"what department you want to select?" ,
       choices: arrylist[1]
-    },{
+    },
+    {
       type: 'list',
       name: 'selManager',
       message:"who is manager?" ,
